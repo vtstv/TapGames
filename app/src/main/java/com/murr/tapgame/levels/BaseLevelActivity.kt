@@ -49,11 +49,9 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         binding.startButton.setOnClickListener {
             startGame()
         }
-
         setupGame()
     }
 
@@ -69,29 +67,41 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         val numbers = (1..maxNumber).shuffled()
         binding.buttonsGridLayout.removeAllViews()
 
+        val buttonSize = calculateButtonSize() // Calculate button size dynamically
+
         for (number in numbers) {
             val button = Button(this)
             button.text = number.toString()
             button.textSize = 20f
-            // Set the button style
             button.setTextAppearance(this, R.style.ButtonStyle)
-            // Set the background using the selector
             button.background = ContextCompat.getDrawable(this, R.drawable.button_selector)
-
             button.setOnClickListener {
                 onNumberButtonClick(button)
             }
-            // Add layout parameters for the GridLayout
-            val params = GridLayout.LayoutParams()
-            params.width = 0 //
-            params.height = GridLayout.LayoutParams.WRAP_CONTENT
-            params.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-            params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-            params.setMargins(8, 8, 8, 8)
-            button.layoutParams = params
 
+            val params = GridLayout.LayoutParams().apply {
+                width = buttonSize // Set button width
+                height = buttonSize // Set button height
+                rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                setMargins(8, 8, 8, 8)
+            }
+            button.layoutParams = params
             binding.buttonsGridLayout.addView(button)
         }
+    }
+
+    private fun calculateButtonSize(): Int {
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+        val buttonMargin = (8 * displayMetrics.density).toInt() // Margin of 8dp
+
+        // Calculate size for portrait and landscape, then choose the smaller
+        val sizePortrait = (screenWidth - (gridColumnCount + 1) * buttonMargin) / gridColumnCount
+        val sizeLandscape = (screenHeight - (gridRowCount + 1) * buttonMargin) / gridRowCount
+
+        return minOf(sizePortrait, sizeLandscape)
     }
 
     protected open fun startGame() {
@@ -113,7 +123,6 @@ abstract class BaseLevelActivity : AppCompatActivity() {
 
     protected open fun onNumberButtonClick(button: Button) {
         if (!isGameRunning) return
-
         val buttonNumber = button.text.toString().toInt()
         if (buttonNumber == currentNumber) {
             handleCorrectAnswer(button)
@@ -200,8 +209,14 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         // Unlock level achievement
         Achievements.unlockAchievement(this, getLevelAchievementKey(level))
 
-        // Show the level completion dialog
-        showLevelCompleteDialog()
+        // Check if the game was won or lost
+        if (currentNumber > maxNumber) {
+            // Game won
+            showLevelCompleteDialog()
+        } else {
+            // Game lost
+            showGameOverDialog()
+        }
     }
 
     // ADDED: Helper function to get achievement key based on level
@@ -222,9 +237,7 @@ abstract class BaseLevelActivity : AppCompatActivity() {
                 visibleButtons.add(child)
             }
         }
-
         val numbers = visibleButtons.map { it.text.toString().toInt() }.shuffled()
-
         for (i in 0 until visibleButtons.size) {
             visibleButtons[i].text = numbers[i].toString()
         }
@@ -235,40 +248,40 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_level_complete, null)
         val congratsTextView = dialogView.findViewById<TextView>(R.id.congratsTextView)
         val scoreTextView = dialogView.findViewById<TextView>(R.id.scoreTextView)
-        val replayButton = dialogView.findViewById<Button>(R.id.replayButton)
-        val nextLevelButton = dialogView.findViewById<Button>(R.id.nextLevelButton)
+        val returnButton = dialogView.findViewById<Button>(R.id.returnButton)
         val confettiView = dialogView.findViewById<KonfettiView>(R.id.confettiView)
 
-        // Set the score text
         scoreTextView.text = "Your Score: $score"
-
-        // Add confetti effect (if KonfettiView is present)
         confettiView?.start(getConfetti())
 
         val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
-            .setCancelable(false) // Prevent the dialog from being dismissed by tapping outside
+            .setCancelable(false)
             .create()
 
-        // Replay button logic
-        replayButton.setOnClickListener {
+        returnButton.setOnClickListener {
             dialog.dismiss()
-            restartGame()
+            returnToMainMenu()
         }
 
-        // Next level button logic (check if there's a next level)
-        nextLevelButton.setOnClickListener {
+        dialog.show()
+    }
+
+    private fun showGameOverDialog() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_game_over, null)
+        val scoreTextView = dialogView.findViewById<TextView>(R.id.scoreTextView)
+        val returnButton = dialogView.findViewById<Button>(R.id.returnButton)
+
+        scoreTextView.text = "Your Score: $score"
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        returnButton.setOnClickListener {
             dialog.dismiss()
-            when (level) {
-                Achievements.LEVEL_EASY -> startActivity(Intent(this, MediumLevelActivity::class.java))
-                Achievements.LEVEL_MEDIUM -> startActivity(Intent(this, HardLevelActivity::class.java))
-                // Add more cases if you have more levels
-                else -> {
-                    // Handle the case where there's no next level (e.g., show a message)
-                    binding.startButton.visibility = View.VISIBLE
-                    binding.startButton.text = "Restart"
-                }
-            }
+            returnToMainMenu()
         }
 
         dialog.show()
@@ -307,5 +320,11 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         }
         setupGame()
         startGame()
+    }
+    private fun returnToMainMenu() {
+        val intent = Intent(this, LevelSelectActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 }

@@ -7,9 +7,8 @@ class EasyLevelActivity : BaseLevelActivity() {
     override val timeIncrement = 3000L
     override val timePenalty = 4000L
     override val gridColumnCount = 4
-    override val gridRowCount = 2
+    override val gridRowCount = 3
     override val maxNumber = gridColumnCount * gridRowCount
-
     override val level: String = Achievements.LEVEL_EASY
 
     override fun onCreate(savedInstanceState: Bundle?) {

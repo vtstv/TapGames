@@ -19,19 +19,24 @@ class LevelSelectActivity : AppCompatActivity() {
         binding.easyButton.setOnClickListener {
             startActivity(Intent(this, EasyLevelActivity::class.java))
         }
+
         binding.mediumButton.setOnClickListener {
             startActivity(Intent(this, MediumLevelActivity::class.java))
         }
+
         binding.hardButton.setOnClickListener {
             startActivity(Intent(this, HardLevelActivity::class.java))
         }
+
         binding.achievementsButton.setOnClickListener {
             startActivity(Intent(this, AchievementsActivity::class.java))
         }
+
         // Start HighScoresActivity
         binding.highScoresButton.setOnClickListener {
             startActivity(Intent(this, HighScoresActivity::class.java))
         }
+
         binding.aboutButton.setOnClickListener {
             startActivity(Intent(this, AboutActivity::class.java))
         }
