@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Tap The Number</string>
-    <string name="about_text">This is a simple Tap the Number game created for Android. \n\nDeveloped by Murr.li \n\nVersion 1.0</string>
+    <string name="about_text">This is a simple Tap the Number game. \n\nDeveloped by Murr.li \n\nVersion 1.0</string>
 </resources>
