@@ -33,7 +33,7 @@
         Желаем удачи в игре \"Ход Конём\"!
     </string>
     <string name="move_number">Ход: %1$d</string>
-    <string name="choose_language">Выберите Язык</string>
+    <string name="choose_language">Язык</string>
     <string name="easy_level">Легкий</string>
     <string name="medium_level">Средний</string>
     <string name="hard_level">Сложный</string>
