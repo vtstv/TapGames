@@ -18,8 +18,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.murr.taptheumber.R
 import com.murr.taptheumber.databinding.ActivityKnightTourBinding
+import com.murr.taptheumber.BaseActivity
 
-class KnightTourActivity : AppCompatActivity() {
+class KnightTourActivity : BaseActivity() {
 
     private lateinit var binding: ActivityKnightTourBinding
     private lateinit var gridLayout: GridLayout

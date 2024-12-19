@@ -75,14 +75,6 @@
             android:text="@string/achievements" />
 
         <Button
-            android:id="@+id/highScoresButton"
-            style="@style/MainMenuButtonStyle"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/high_scores" />
-
-        <Button
             android:id="@+id/aboutButton"
             style="@style/MainMenuButtonStyle"
             android:layout_width="200dp"

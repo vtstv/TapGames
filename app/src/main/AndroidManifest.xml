@@ -26,6 +26,13 @@
         <activity android:name=".HighScoresActivity" />
         <activity android:name=".levels.KnightTourActivity" />
 
+        <receiver android:name=".LanguageChangedReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.murr.taptheumber.LANGUAGE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
