@@ -2,6 +2,7 @@ package com.murr.taptheumber.levels
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -132,7 +133,11 @@ class KnightTourActivity : AppCompatActivity() {
             button.text = moveNumber.toString()
             button.setTextColor(selectedFontColor)
             currentCell = cellIndex
-            updateHints()
+            if (!hasValidMoves(currentCell / boardSize, currentCell % boardSize)) {
+                showGameOverDialog()
+            } else {
+                updateHints()
+            }
         } else {
             val row = cellIndex / boardSize
             val col = cellIndex % boardSize
@@ -153,7 +158,11 @@ class KnightTourActivity : AppCompatActivity() {
                 button.text = moveNumber.toString()
                 button.setTextColor(selectedFontColor)
                 currentCell = cellIndex
-                updateHints()
+                if (!hasValidMoves(currentCell / boardSize, currentCell % boardSize)) {
+                    showGameOverDialog()
+                } else {
+                    updateHints()
+                }
             } else if (cellIndex == currentCell) {
                 moveNumber--
                 cells[cellIndex] = ""
@@ -168,9 +177,43 @@ class KnightTourActivity : AppCompatActivity() {
         moveNumberTextView.text = getString(R.string.move_number, moveNumber)
     }
 
+    private fun showGameOverDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Game Over")
+            .setMessage("No more moves available!")
+            .setPositiveButton("New Game") { dialog, _ ->
+                dialog.dismiss()
+                startNewGame()
+            }
+            .setNegativeButton("Main Menu") { dialog, _ ->
+                dialog.dismiss()
+                returnToMainMenu()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun returnToMainMenu() {
+        val intent = Intent(this, LevelSelectActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
+    }
+
     private fun isPossibleMove(prevRow: Int, prevCol: Int, row: Int, col: Int): Boolean {
         for (i in 0 until 8) {
             if (prevRow + possibleMovesY[i] == row && prevCol + possibleMovesX[i] == col) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun hasValidMoves(row: Int, col: Int): Boolean {
+        for (i in 0 until 8) {
+            val nextRow = row + possibleMovesY[i]
+            val nextCol = col + possibleMovesX[i]
+            if (nextRow in 0 until boardSize && nextCol in 0 until boardSize && cells[nextRow * boardSize + nextCol] == "") {
                 return true
             }
         }
