@@ -8,38 +8,37 @@
         android:id="@+id/levelButtonsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginBottom="32dp"
         android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/buttonsContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="32dp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/easyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Easy" />
+            android:text="@string/easy_level" />
 
         <Button
             android:id="@+id/mediumButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Medium" />
+            android:text="@string/medium_level" />
 
         <Button
             android:id="@+id/hardButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hard" />
+            android:text="@string/hard_level" />
 
         <Button
             android:id="@+id/knightTourButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Knight's Tour" />
-
+            android:text="@string/knight_tour" />
     </LinearLayout>
 
     <LinearLayout
@@ -47,28 +46,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:padding="16dp">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/achievementsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Achievements" />
+            android:text="@string/achievements" />
 
         <Button
             android:id="@+id/highScoresButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="High Scores" />
+            android:text="@string/high_scores" />
 
         <Button
             android:id="@+id/aboutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="About" />
+            android:text="@string/about" />
+        <Button
+            android:id="@+id/languageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_language" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

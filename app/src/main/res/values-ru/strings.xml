@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Соедини Цифры</string>
+    <string name="about_text">Это простая игра \"Соедини Цифры\". \n\nРазработчик: Murr.li \n\nВерсия 1.0</string>
+    <string name="knight_tour_info">ЦЕЛЬ ИГРЫ (ГОЛОВОЛОМКИ): Необходимо обойти доску по правилу перемещения шахматного коня с попаданием в каждое поле по одному разу. Начинать можно с любого поля. Возвращаться в начало, то есть совершать обход по замкнутому маршруту, не обязательно.</string>
+    <string name="new_game">Новая Игра</string>
+    <string name="start_new_game_confirmation">Вы уверены, что хотите начать новую игру?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="enable_hints">Включить Подсказки</string>
+    <string name="disable_hints">Отключить Подсказки</string>
+    <string name="congratulations">Поздравляем!</string>
+    <string name="board_completed">Вы обошли всю доску!</string>
+    <string name="ok">OK</string>
+    <string name="font_size">Размер Шрифта:</string>
+    <string name="font_color">Цвет Шрифта:</string>
+    <string name="help">Помощь</string>
+    <string name="help_title">Помощь по игре \"Ход Конём\"</string>
+    <string name="help_message">
+        \t\tОписание Игры:\n
+        \"Ход Конём\" - это математическая задача, в которой необходимо перемещать шахматного коня по доске таким образом, чтобы посетить каждую клетку ровно один раз.\n\n
+        \t\tЦель:\n
+        Цель состоит в том, чтобы найти последовательность ходов коня, которая охватывает все клетки, не переходя ни на одну из них дважды.\n\n
+        \t\tКак Играть:\n
+        - Нажмите на клетку, чтобы начать обход.\n
+        - Конь может двигаться только в форме буквы \"Г\": две клетки в горизонтальном или вертикальном направлении, затем одна клетка перпендикулярно этому направлению.\n
+        - Продолжайте перемещать коня, пока не посетите все клетки, или пока не останется доступных ходов.\n\n
+        \t\tПодсказки:\n
+        - Символы подсказок указывают на количество возможных следующих ходов из данной клетки.\n
+        - \'+\': Рекомендуемый ход по правилу Варнсдорфа.\n
+        - \'++\': Обязательный ход, при котором есть только один возможный следующий ход.\n
+        - \'-\': Возможный, но не рекомендуемый ход.\n
+        - \'--\': Тупиковый ход (нет дальнейших ходов).\n\n
+        Желаем удачи в игре \"Ход Конём\"!
+    </string>
+    <string name="move_number">Ход: %1$d</string>
+    <string name="choose_language">Выберите Язык</string>
+    <string name="easy_level">Легкий</string>
+    <string name="medium_level">Средний</string>
+    <string name="hard_level">Сложный</string>
+    <string name="knight_tour">Ход конем</string>
+    <string name="achievements">Достижения</string>
+    <string name="high_scores">Рекорды</string>
+    <string name="about">О программе</string>
+</resources>

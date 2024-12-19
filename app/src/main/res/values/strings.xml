@@ -13,7 +13,6 @@
     <string name="ok">OK</string>
     <string name="font_size">Font Size:</string>
     <string name="font_color">Font Color:</string>
-    <string name="move_number">Move: %1$d</string>
     <string name="help">Help</string>
     <string name="help_title">Knight\'s Tour Help</string>
     <string name="help_message">
@@ -33,5 +32,13 @@
         - \'--\': A dead-end move (no further moves possible).\n\n
         Have fun playing the Knight\'s Tour!
     </string>
+    <string name="move_number">Move: %1$d</string>
+    <string name="choose_language">Choose Language</string>
+    <string name="easy_level">Easy</string>
+    <string name="medium_level">Medium</string>
+    <string name="hard_level">Hard</string>
+    <string name="knight_tour">Knight Tour</string>
+    <string name="achievements">Achievements</string>
+    <string name="high_scores">High Scores</string>
+    <string name="about">About</string>
 </resources>
-
