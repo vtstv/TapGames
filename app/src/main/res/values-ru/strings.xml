@@ -41,4 +41,7 @@
     <string name="achievements">Достижения</string>
     <string name="high_scores">Рекорды</string>
     <string name="about">О программе</string>
+    <string name="select_game">Выберите Игру</string>
+    <string name="choose_difficulty">Выберите Сложность</string>
+    <string name="tap_the_number">Соедини Цифры</string>
 </resources>

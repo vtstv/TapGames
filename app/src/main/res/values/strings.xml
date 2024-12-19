@@ -41,4 +41,7 @@
     <string name="achievements">Achievements</string>
     <string name="high_scores">High Scores</string>
     <string name="about">About</string>
+    <string name="select_game">Select Game</string>
+    <string name="choose_difficulty">Choose Difficulty</string>
+    <string name="tap_the_number">Tap the Number</string>
 </resources>

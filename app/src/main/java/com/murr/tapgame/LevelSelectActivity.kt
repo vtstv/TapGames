@@ -27,16 +27,11 @@ class LevelSelectActivity : AppCompatActivity() {
 
         languageButton = binding.languageButton
 
-        binding.easyButton.setOnClickListener {
-            startActivity(Intent(this, EasyLevelActivity::class.java))
+        binding.knightTourButton.setOnClickListener {
+            startActivity(Intent(this, KnightTourActivity::class.java))
         }
-
-        binding.mediumButton.setOnClickListener {
-            startActivity(Intent(this, MediumLevelActivity::class.java))
-        }
-
-        binding.hardButton.setOnClickListener {
-            startActivity(Intent(this, HardLevelActivity::class.java))
+        binding.tapTheNumberButton.setOnClickListener {
+            showTapTheNumberDifficultySelection()
         }
 
         binding.achievementsButton.setOnClickListener {
@@ -49,9 +44,6 @@ class LevelSelectActivity : AppCompatActivity() {
 
         binding.aboutButton.setOnClickListener {
             startActivity(Intent(this, AboutActivity::class.java))
-        }
-        binding.knightTourButton.setOnClickListener {
-            startActivity(Intent(this, KnightTourActivity::class.java))
         }
         languageButton.setOnClickListener {
             showLanguageSelectionDialog()
@@ -104,5 +96,25 @@ class LevelSelectActivity : AppCompatActivity() {
         val configuration = resources.configuration
         configuration.setLocale(locale)
         resources.updateConfiguration(configuration, resources.displayMetrics)
+    }
+    private fun showTapTheNumberDifficultySelection() {
+        val difficultyLevels = arrayOf(
+            getString(R.string.easy_level),
+            getString(R.string.medium_level),
+            getString(R.string.hard_level)
+        )
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.choose_difficulty))
+        builder.setItems(difficultyLevels) { dialog, which ->
+            when (which) {
+                0 -> startActivity(Intent(this, EasyLevelActivity::class.java))
+                1 -> startActivity(Intent(this, MediumLevelActivity::class.java))
+                2 -> startActivity(Intent(this, HardLevelActivity::class.java))
+            }
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 }
