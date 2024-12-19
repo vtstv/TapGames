@@ -9,6 +9,7 @@
     <color name="green">#00FF00</color>
     <color name="light_gray">#EEEEEE</color>
     <color name="dark_gray">#607D8B</color>
+    <color name="middle_gray">#E2B5D0D7</color>
     <color name="accent_blue">#1976D2</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>

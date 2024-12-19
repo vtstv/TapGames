@@ -73,10 +73,18 @@ class KnightTourActivity : BaseActivity() {
                 columnSpec = GridLayout.spec(i % boardSize, 1f)
                 width = 0
                 height = 0
-                setMargins(4, 4, 4, 4) // Increased margins
+                setMargins(4, 4, 4, 4)
             }
-            button.setPadding(8, 8, 8, 8) // Added padding
-            button.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))
+            button.setPadding(8, 8, 8, 8)
+
+            val row = i / boardSize
+            val col = i % boardSize
+            if ((row + col) % 2 == 0) {
+                button.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            } else {
+                button.setBackgroundColor(ContextCompat.getColor(this, R.color.middle_gray))
+            }
+
             button.setTextColor(selectedFontColor)
             button.textSize = selectedFontSize
             button.setOnClickListener { onCellClicked(i) }
