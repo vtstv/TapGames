@@ -180,7 +180,7 @@ class KnightTourActivity : BaseActivity() {
 
     private fun onCellClicked(cellIndex: Int) {
         if (moveNumber == 0) {
-            // First move - оставляем как есть
+
             moveNumber = 1
             totalMoves = 1
             cells[cellIndex] = moveNumber.toString()
@@ -209,7 +209,7 @@ class KnightTourActivity : BaseActivity() {
                 moveNumber++
                 totalMoves++
 
-                // Обновляем предыдущую клетку - возвращаем ей цвет и показываем номер
+
                 val prevFrameLayout = gridLayout.getChildAt(currentCell) as FrameLayout
                 val prevButton = prevFrameLayout.getChildAt(0) as Button
                 val prevImageView = prevFrameLayout.findViewWithTag<ImageView>("knight_icon")
@@ -221,13 +221,13 @@ class KnightTourActivity : BaseActivity() {
                 }
                 prevImageView.setImageDrawable(null)
 
-                // Обновляем новую клетку - делаем прозрачной и показываем коня
+
                 cells[cellIndex] = moveNumber.toString()
                 val frameLayout = gridLayout.getChildAt(cellIndex) as FrameLayout
                 val button = frameLayout.getChildAt(0) as Button
                 val imageView = frameLayout.findViewWithTag<ImageView>("knight_icon")
                 button.text = ""
-                button.setBackgroundColor(Color.TRANSPARENT)  // Делаем фон прозрачным
+                button.setBackgroundColor(Color.TRANSPARENT)
                 val knightIcon = ContextCompat.getDrawable(this, R.drawable.knight_icon)
                 imageView.setImageDrawable(knightIcon)
                 currentCell = cellIndex
@@ -363,8 +363,7 @@ class KnightTourActivity : BaseActivity() {
                         movesCount <= minMoves -> "+"
                         else -> ""
                     }
-                    // Set hint text color to black
-                    button.setTextColor(Color.BLACK)
+                    button.setTextColor(selectedFontColor)
                     button.text = hintText
                     // Set cell background color
                     if ((move / boardSize + move % boardSize) % 2 == 0) {
