@@ -40,5 +40,9 @@ class LevelSelectActivity : AppCompatActivity() {
         binding.aboutButton.setOnClickListener {
             startActivity(Intent(this, AboutActivity::class.java))
         }
+
+        binding.knightTourButton.setOnClickListener {
+            startActivity(Intent(this, KnightTourActivity::class.java))
+        }
     }
 }

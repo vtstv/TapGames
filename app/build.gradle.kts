@@ -9,7 +9,8 @@ android {
 
     defaultConfig {
         applicationId = "com.murr.taptheumber"
-        minSdk = 24 // Android 7.0
+        minSdk = 26
+        // Android 7.0
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
