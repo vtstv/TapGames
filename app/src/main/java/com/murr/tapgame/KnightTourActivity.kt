@@ -69,8 +69,9 @@ class KnightTourActivity : AppCompatActivity() {
                 columnSpec = GridLayout.spec(i % boardSize, 1f)
                 width = 0
                 height = 0
-                setMargins(2, 2, 2, 2)
+                setMargins(4, 4, 4, 4)
             }
+            button.setPadding(8, 8, 8, 8)
             button.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))
             button.setTextColor(selectedFontColor)
             button.textSize = selectedFontSize
@@ -251,7 +252,7 @@ class KnightTourActivity : AppCompatActivity() {
         }
     }
     private fun setupSpinners() {
-        val fontSizeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, (16..24 step 2).map { "$it" })
+        val fontSizeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, (18..28 step 2).map { "$it" })
         fontSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         fontSizeSpinner.adapter = fontSizeAdapter
 
