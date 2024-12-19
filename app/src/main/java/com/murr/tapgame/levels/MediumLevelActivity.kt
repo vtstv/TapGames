@@ -14,7 +14,7 @@ class MediumLevelActivity : BaseLevelActivity() {
     override val level: String = Achievements.LEVEL_MEDIUM
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        timeRemaining = 30000L
+        timeRemaining = 20000L
         super.onCreate(savedInstanceState)
     }
 }

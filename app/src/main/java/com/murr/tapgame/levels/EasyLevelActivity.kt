@@ -12,7 +12,7 @@ class EasyLevelActivity : BaseLevelActivity() {
     override val level: String = Achievements.LEVEL_EASY
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        timeRemaining = 45000L
+        timeRemaining = 25000L
         super.onCreate(savedInstanceState)
     }
 }
