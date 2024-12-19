@@ -6,8 +6,12 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.GridLayout
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -21,6 +25,8 @@ class KnightTourActivity : AppCompatActivity() {
     private lateinit var newGameButton: Button
     private lateinit var toggleHintsButton: Button
     private lateinit var moveNumberTextView: TextView
+    private lateinit var fontSizeSpinner: Spinner
+    private lateinit var fontColorSpinner: Spinner
 
     private val boardSize = 10
     private var moveNumber = 0
@@ -31,6 +37,9 @@ class KnightTourActivity : AppCompatActivity() {
     private val possibleMovesY = intArrayOf(2, 1, -1, -2, -2, -1, 1, 2)
     private var currentCell = -1
 
+    private var selectedFontSize = 20f // Default font size
+    private var selectedFontColor = Color.BLUE // Default font color
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKnightTourBinding.inflate(layoutInflater)
@@ -40,10 +49,13 @@ class KnightTourActivity : AppCompatActivity() {
         newGameButton = binding.newGameButton
         toggleHintsButton = binding.toggleHintsButton
         moveNumberTextView = binding.moveNumber
+        fontSizeSpinner = binding.fontSizeSpinner
+        fontColorSpinner = binding.fontColorSpinner
 
         gridLayout.rowCount = boardSize
         gridLayout.columnCount = boardSize
 
+        setupSpinners()
         initializeBoard()
         setupButtons()
     }
@@ -60,7 +72,8 @@ class KnightTourActivity : AppCompatActivity() {
                 setMargins(2, 2, 2, 2)
             }
             button.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))
-            button.setTextColor(ContextCompat.getColor(this, R.color.accent_blue))
+            button.setTextColor(selectedFontColor)
+            button.textSize = selectedFontSize
             button.setOnClickListener { onCellClicked(i) }
             gridLayout.addView(button)
         }
@@ -70,12 +83,12 @@ class KnightTourActivity : AppCompatActivity() {
         newGameButton.setOnClickListener {
             if (moveNumber > 0) {
                 AlertDialog.Builder(this)
-                    .setMessage("Are you sure you want to start a new game?")
-                    .setPositiveButton("Yes") { dialog: DialogInterface, _: Int ->
+                    .setMessage(getString(R.string.start_new_game_confirmation))
+                    .setPositiveButton(getString(R.string.yes)) { dialog: DialogInterface, _: Int ->
                         dialog.dismiss()
                         startNewGame()
                     }
-                    .setNegativeButton("No") { dialog: DialogInterface, _: Int ->
+                    .setNegativeButton(getString(R.string.no)) { dialog: DialogInterface, _: Int ->
                         dialog.dismiss()
                     }
                     .show()
@@ -86,7 +99,7 @@ class KnightTourActivity : AppCompatActivity() {
 
         toggleHintsButton.setOnClickListener {
             isHintsEnabled = !isHintsEnabled
-            toggleHintsButton.text = if (isHintsEnabled) "Disable Hints" else "Enable Hints"
+            toggleHintsButton.text = if (isHintsEnabled) getString(R.string.disable_hints) else getString(R.string.enable_hints)
             updateHints()
         }
     }
@@ -100,11 +113,12 @@ class KnightTourActivity : AppCompatActivity() {
             val button = gridLayout.getChildAt(i) as Button
             button.text = ""
             button.isEnabled = true
-            button.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))
-            button.setTextColor(ContextCompat.getColor(this, R.color.accent_blue))
+            button.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))//same color
+            button.setTextColor(selectedFontColor)
+            button.textSize = selectedFontSize
 
         }
-        moveNumberTextView.text = "Move: 0"
+        moveNumberTextView.text = getString(R.string.move_number, 0)
 
     }
 
@@ -113,8 +127,9 @@ class KnightTourActivity : AppCompatActivity() {
             moveNumber = 1
             totalMoves = 1
             cells[cellIndex] = moveNumber.toString()
-            (gridLayout.getChildAt(cellIndex) as Button).text = moveNumber.toString()
-            activateCell(cellIndex)
+            val button = gridLayout.getChildAt(cellIndex) as Button
+            button.text = moveNumber.toString()
+            button.setTextColor(selectedFontColor)
             currentCell = cellIndex
             updateHints()
         } else {
@@ -128,28 +143,28 @@ class KnightTourActivity : AppCompatActivity() {
                 totalMoves++
                 if (moveNumber == boardSize * boardSize) {
                     AlertDialog.Builder(this)
-                        .setMessage("Congratulations! You have completed the tour!")
-                        .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                        .setMessage(getString(R.string.board_completed))
+                        .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
                         .show()
                 }
                 cells[cellIndex] = moveNumber.toString()
-                (gridLayout.getChildAt(cellIndex) as Button).text = moveNumber.toString()
-                deactivateCell(currentCell)
-                activateCell(cellIndex)
+                val button = gridLayout.getChildAt(cellIndex) as Button
+                button.text = moveNumber.toString()
+                button.setTextColor(selectedFontColor)
                 currentCell = cellIndex
                 updateHints()
             } else if (cellIndex == currentCell) {
                 moveNumber--
                 cells[cellIndex] = ""
                 (gridLayout.getChildAt(cellIndex) as Button).text = ""
-                deactivateCell(cellIndex)
                 if (moveNumber > 0) {
-                    activateCell(currentCell)
+                    val button = gridLayout.getChildAt(currentCell) as Button
+                    button.setTextColor(selectedFontColor)
                 }
                 updateHints()
             }
         }
-        moveNumberTextView.text = "Move: $moveNumber"
+        moveNumberTextView.text = getString(R.string.move_number, moveNumber)
     }
 
     private fun isPossibleMove(prevRow: Int, prevCol: Int, row: Int, col: Int): Boolean {
@@ -159,18 +174,6 @@ class KnightTourActivity : AppCompatActivity() {
             }
         }
         return false
-    }
-
-    private fun activateCell(cellIndex: Int) {
-        val button = gridLayout.getChildAt(cellIndex) as Button
-        button.setBackgroundColor(ContextCompat.getColor(this, R.color.accent_blue))
-        button.setTextColor(ContextCompat.getColor(this, R.color.light_gray))
-    }
-
-    private fun deactivateCell(cellIndex: Int) {
-        val button = gridLayout.getChildAt(cellIndex) as Button
-        button.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))
-        button.setTextColor(ContextCompat.getColor(this, R.color.accent_blue))
     }
 
     private fun updateHints() {
@@ -245,6 +248,54 @@ class KnightTourActivity : AppCompatActivity() {
             if (cells[i] == "") {
                 button.text = ""
             }
+        }
+    }
+    private fun setupSpinners() {
+        val fontSizeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, (16..24 step 2).map { "$it" })
+        fontSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        fontSizeSpinner.adapter = fontSizeAdapter
+
+        fontSizeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                selectedFontSize = fontSizeAdapter.getItem(position)!!.toFloat()
+                updateButtonFont()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        val fontColorAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            listOf("Blue", "Red", "Green", "Black", "Yellow")
+        )
+        fontColorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        fontColorSpinner.adapter = fontColorAdapter
+
+        fontColorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val colorName = fontColorAdapter.getItem(position)!!
+                selectedFontColor = when (colorName) {
+                    "Red" -> Color.RED
+                    "Green" -> Color.GREEN
+                    "Black" -> Color.BLACK
+                    "Yellow" -> Color.YELLOW
+                    else -> Color.BLUE
+                }
+                updateButtonFont()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+        fontSizeSpinner.setSelection(2) // Assuming "20" is the 3rd item
+        fontColorSpinner.setSelection(0) // Assuming "Blue" is the 1st item
+    }
+
+    private fun updateButtonFont() {
+        for (i in 0 until gridLayout.childCount) {
+            val button = gridLayout.getChildAt(i) as Button
+            button.textSize = selectedFontSize
+            button.setTextColor(selectedFontColor)
         }
     }
 }
