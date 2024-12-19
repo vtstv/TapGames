@@ -45,6 +45,9 @@ abstract class BaseLevelActivity : AppCompatActivity() {
     // ADDED: Abstract property for level
     protected abstract val level: String
 
+    // ADDED: Button size
+    private val buttonSize = 120 // You can adjust this value
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -63,11 +66,8 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         binding.timerTextView.text = "Time: ${timeRemaining / 1000}"
         binding.buttonsGridLayout.columnCount = gridColumnCount
         binding.buttonsGridLayout.rowCount = gridRowCount
-
         val numbers = (1..maxNumber).shuffled()
         binding.buttonsGridLayout.removeAllViews()
-
-        val buttonSize = calculateButtonSize() // Calculate button size dynamically
 
         for (number in numbers) {
             val button = Button(this)
@@ -79,9 +79,10 @@ abstract class BaseLevelActivity : AppCompatActivity() {
                 onNumberButtonClick(button)
             }
 
+            // Set static button size
             val params = GridLayout.LayoutParams().apply {
-                width = buttonSize // Set button width
-                height = buttonSize // Set button height
+                width = buttonSize
+                height = buttonSize
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 setMargins(8, 8, 8, 8)
@@ -89,19 +90,6 @@ abstract class BaseLevelActivity : AppCompatActivity() {
             button.layoutParams = params
             binding.buttonsGridLayout.addView(button)
         }
-    }
-
-    private fun calculateButtonSize(): Int {
-        val displayMetrics = resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        val screenHeight = displayMetrics.heightPixels
-        val buttonMargin = (8 * displayMetrics.density).toInt() // Margin of 8dp
-
-        // Calculate size for portrait and landscape, then choose the smaller
-        val sizePortrait = (screenWidth - (gridColumnCount + 1) * buttonMargin) / gridColumnCount
-        val sizeLandscape = (screenHeight - (gridRowCount + 1) * buttonMargin) / gridRowCount
-
-        return minOf(sizePortrait, sizeLandscape)
     }
 
     protected open fun startGame() {
@@ -136,8 +124,8 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         binding.scoreTextView.text = "Score: $score"
         button.visibility = View.INVISIBLE
         currentNumber++
-
         timer?.cancel()
+
         timeRemaining += timeIncrement
         timer = object : CountDownTimer(timeRemaining, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -160,10 +148,10 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         }
         lastTapTime = currentTime
 
-        shuffleButtonNumbers()
-
         if (currentNumber > maxNumber) {
             endGame()
+        } else {
+            shuffleButtonNumbers()
         }
     }
 
@@ -184,7 +172,8 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         comboMultiplier = 1
 
         // Change the button color to red briefly
-        button.background = ContextCompat.getDrawable(this, R.drawable.round_button_pressed)
+        button.background =
+            ContextCompat.getDrawable(this, R.drawable.round_button_pressed)
         Handler(Looper.getMainLooper()).postDelayed({
             button.background = ContextCompat.getDrawable(this, R.drawable.button_selector)
         }, 250)
@@ -197,7 +186,10 @@ abstract class BaseLevelActivity : AppCompatActivity() {
 
         // Log the current score and high score for debugging
         Log.d("BaseLevelActivity", "Current Score: $score")
-        Log.d("BaseLevelActivity", "High Score ($level): ${Achievements.getHighScore(this, level)}")
+        Log.d(
+            "BaseLevelActivity",
+            "High Score ($level): ${Achievements.getHighScore(this, level)}"
+        )
 
         // Update high score if necessary
         val currentHighScore = Achievements.getHighScore(this, level)
@@ -243,12 +235,12 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         }
     }
 
-    // ADDED: Show the level completion dialog
     private fun showLevelCompleteDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_level_complete, null)
         val congratsTextView = dialogView.findViewById<TextView>(R.id.congratsTextView)
         val scoreTextView = dialogView.findViewById<TextView>(R.id.scoreTextView)
         val returnButton = dialogView.findViewById<Button>(R.id.returnButton)
+        val nextLevelButton = dialogView.findViewById<Button>(R.id.nextLevelButton) // Get the Next Level button
         val confettiView = dialogView.findViewById<KonfettiView>(R.id.confettiView)
 
         scoreTextView.text = "Your Score: $score"
@@ -259,16 +251,71 @@ abstract class BaseLevelActivity : AppCompatActivity() {
             .setCancelable(false)
             .create()
 
+        // Set the click listener for the Return to Main Menu button
         returnButton.setOnClickListener {
             dialog.dismiss()
             returnToMainMenu()
         }
 
+        // Check if there's a next level and show/hide the Next Level button accordingly
+        if (hasNextLevel()) {
+            nextLevelButton.visibility = View.VISIBLE
+            nextLevelButton.setOnClickListener {
+                dialog.dismiss()
+                goToNextLevel()
+            }
+        } else {
+            nextLevelButton.visibility = View.GONE
+        }
+
         dialog.show()
     }
 
+    // Helper function to check if there's a next level
+    private fun hasNextLevel(): Boolean {
+        return when (level) {
+            Achievements.LEVEL_EASY -> true
+            Achievements.LEVEL_MEDIUM -> true
+            Achievements.LEVEL_HARD -> false
+            else -> false // Default to no next level
+        }
+    }
+
+    // Go to next level
+    private fun goToNextLevel() {
+        when (level) {
+            Achievements.LEVEL_EASY -> {
+                val intent = Intent(this, MediumLevelActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            Achievements.LEVEL_MEDIUM -> {
+                val intent = Intent(this, HardLevelActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            Achievements.LEVEL_HARD -> {
+                // All levels completed, show a congratulatory message or return to the main menu
+                showCongratulationsDialog()
+            }
+            else -> returnToMainMenu() // If the level is not recognized, return to the main menu
+        }
+    }
+    // Show Congratulation Dialog
+    private fun showCongratulationsDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Congratulations!")
+            .setMessage("You have completed all levels!")
+            .setPositiveButton("Return to Main Menu") { _, _ ->
+                returnToMainMenu()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
     private fun showGameOverDialog() {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_game_over, null)
+        val dialogView =
+            LayoutInflater.from(this).inflate(R.layout.dialog_game_over, null)
         val scoreTextView = dialogView.findViewById<TextView>(R.id.scoreTextView)
         val returnButton = dialogView.findViewById<Button>(R.id.returnButton)
 
@@ -313,14 +360,15 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         score = 0
         comboMultiplier = 1
         timeRemaining = when (level) {
-            Achievements.LEVEL_EASY -> 45000L
-            Achievements.LEVEL_MEDIUM -> 30000L
-            Achievements.LEVEL_HARD -> 20000L
-            else -> 60000L // Default time
+            Achievements.LEVEL_EASY -> 30000L
+            Achievements.LEVEL_MEDIUM -> 25000L
+            Achievements.LEVEL_HARD -> 12000L
+            else -> 45000L // Default time
         }
         setupGame()
         startGame()
     }
+
     private fun returnToMainMenu() {
         val intent = Intent(this, LevelSelectActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK

@@ -44,5 +44,15 @@
             android:layout_height="wrap_content"
             android:text="Return to Main Menu"
             android:background="@drawable/button_selector"/>
+
+        <Button
+            android:id="@+id/nextLevelButton"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Next Level"
+            android:visibility="gone"
+            android:background="@drawable/button_selector"/>
     </LinearLayout>
 </LinearLayout>
