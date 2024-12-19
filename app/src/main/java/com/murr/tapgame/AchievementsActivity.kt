@@ -38,6 +38,13 @@ class AchievementsActivity : AppCompatActivity() {
             "Reach Medium Level: ${getAchievementStatus(Achievements.KEY_REACHED_LEVEL_MEDIUM)}"
         binding.achievementHardTextView.text =
             "Reach Hard Level: ${getAchievementStatus(Achievements.KEY_REACHED_LEVEL_HARD)}"
+        // Knight Tour Achievements
+        binding.achievementKnightTour10.text =
+            "${getString(R.string.achievement_knight_tour_10)}: ${getAchievementStatus(Achievements.KEY_KNIGHT_TOUR_10_MOVES)}"
+        binding.achievementKnightTour50.text =
+            "${getString(R.string.achievement_knight_tour_50)}: ${getAchievementStatus(Achievements.KEY_KNIGHT_TOUR_50_MOVES)}"
+        binding.achievementKnightTour100.text =
+            "${getString(R.string.achievement_knight_tour_100)}: ${getAchievementStatus(Achievements.KEY_KNIGHT_TOUR_100_MOVES)}"
     }
 
     private fun getAchievementStatus(achievementKey: String): String {

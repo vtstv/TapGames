@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.murr.taptheumber.Achievements
 import com.murr.taptheumber.R
 import com.murr.taptheumber.databinding.ActivityKnightTourBinding
 import com.murr.taptheumber.BaseActivity
@@ -31,6 +32,7 @@ class KnightTourActivity : BaseActivity() {
     private lateinit var fontColorSpinner: android.widget.Spinner
     private lateinit var helpButton: Button
 
+    private var totalKnightMoves = 0
     private val boardSize = 10
     private var moveNumber = 0
     private var totalMoves = 0
@@ -58,6 +60,7 @@ class KnightTourActivity : BaseActivity() {
         setupSpinners()
         initializeBoard()
         setupButtons()
+        Achievements.initializeKnightTourAchievements(this)
     }
 
     private fun initializeBoard() {
@@ -72,7 +75,7 @@ class KnightTourActivity : BaseActivity() {
                 height = 0
                 setMargins(4, 4, 4, 4)
             }
-
+            totalKnightMoves = 0
             // Create the button
             val button = Button(this)
             button.layoutParams = FrameLayout.LayoutParams(
@@ -108,9 +111,11 @@ class KnightTourActivity : BaseActivity() {
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER
             ).apply {
-                width = 150 // Задайте нужный размер
-                height = 150 // Задайте нужный размер
+                val padding = 5
+                setMargins(padding, padding, padding, padding)
             }
+            imageView.tag = "knight_icon"
+            imageView.scaleType = ImageView.ScaleType.FIT_CENTER
             // Add the FrameLayout to the GridLayout
             gridLayout.addView(frameLayout)
         }
@@ -147,6 +152,8 @@ class KnightTourActivity : BaseActivity() {
         moveNumber = 0
         totalMoves = 0
         currentCell = -1
+        totalKnightMoves = 0
+        moveNumberTextView.text = getString(R.string.move_number, 0)
         for (i in 0 until boardSize * boardSize) {
             cells[i] = ""
             val frameLayout = gridLayout.getChildAt(i) as FrameLayout
@@ -208,6 +215,7 @@ class KnightTourActivity : BaseActivity() {
                 // Valid move
                 moveNumber++
                 totalMoves++
+                totalKnightMoves++
 
 
                 val prevFrameLayout = gridLayout.getChildAt(currentCell) as FrameLayout
@@ -247,6 +255,12 @@ class KnightTourActivity : BaseActivity() {
             }
         }
         moveNumberTextView.text = getString(R.string.move_number, moveNumber)
+        // Check for Knight Tour achievements
+        when (totalKnightMoves) {
+            10 -> Achievements.unlockAchievement(this, Achievements.KEY_KNIGHT_TOUR_10_MOVES)
+            50 -> Achievements.unlockAchievement(this, Achievements.KEY_KNIGHT_TOUR_50_MOVES)
+            100 -> Achievements.unlockAchievement(this, Achievements.KEY_KNIGHT_TOUR_100_MOVES)
+        }
     }
 
     // Helper function to get the previous cell index based on moveNumber
@@ -282,6 +296,7 @@ class KnightTourActivity : BaseActivity() {
     private fun showGameOverDialog() {
         AlertDialog.Builder(this)
             .setTitle("Game Over")
+            .setMessage("No more moves available!\nTotal moves: $totalKnightMoves")
             .setMessage("No more moves available!")
             .setPositiveButton("New Game") { dialog, _ ->
                 dialog.dismiss()

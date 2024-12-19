@@ -44,4 +44,7 @@
     <string name="select_game">Select Game</string>
     <string name="choose_difficulty">Choose Difficulty</string>
     <string name="tap_the_number">Tap the Number</string>
+    <string name="achievement_knight_tour_10">Knight\'s Journey: 10 moves</string>
+    <string name="achievement_knight_tour_50">Knight\'s Expedition: 50 moves</string>
+    <string name="achievement_knight_tour_100">Knight\'s Odyssey: 100 moves</string>
 </resources>

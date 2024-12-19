@@ -14,6 +14,11 @@ object Achievements {
     const val LEVEL_MEDIUM = "medium"
     const val LEVEL_HARD = "hard"
 
+    // Knight Tour Achievement Keys
+    const val KEY_KNIGHT_TOUR_10_MOVES = "knight_tour_10_moves"
+    const val KEY_KNIGHT_TOUR_50_MOVES = "knight_tour_50_moves"
+    const val KEY_KNIGHT_TOUR_100_MOVES = "knight_tour_100_moves"
+
     // Achievement Keys
     const val KEY_REACHED_LEVEL_EASY = "reached_level_easy"
     const val KEY_REACHED_LEVEL_MEDIUM = "reached_level_medium"
@@ -47,6 +52,21 @@ object Achievements {
             editor.putBoolean(achievementKey, true)
             editor.apply()
         }
+    }
+
+    fun initializeKnightTourAchievements(context: Context) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        if (!prefs.contains(KEY_KNIGHT_TOUR_10_MOVES)) {
+            editor.putBoolean(KEY_KNIGHT_TOUR_10_MOVES, false)
+        }
+        if (!prefs.contains(KEY_KNIGHT_TOUR_50_MOVES)) {
+            editor.putBoolean(KEY_KNIGHT_TOUR_50_MOVES, false)
+        }
+        if (!prefs.contains(KEY_KNIGHT_TOUR_100_MOVES)) {
+            editor.putBoolean(KEY_KNIGHT_TOUR_100_MOVES, false)
+        }
+        editor.apply()
     }
 
     fun isAchievementUnlocked(context: Context, achievementKey: String): Boolean {
