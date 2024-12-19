@@ -28,6 +28,7 @@ class KnightTourActivity : AppCompatActivity() {
     private lateinit var moveNumberTextView: TextView
     private lateinit var fontSizeSpinner: Spinner
     private lateinit var fontColorSpinner: Spinner
+    private lateinit var helpButton: Button
 
     private val boardSize = 10
     private var moveNumber = 0
@@ -52,6 +53,7 @@ class KnightTourActivity : AppCompatActivity() {
         moveNumberTextView = binding.moveNumber
         fontSizeSpinner = binding.fontSizeSpinner
         fontColorSpinner = binding.fontColorSpinner
+        helpButton = binding.helpButton
 
         gridLayout.rowCount = boardSize
         gridLayout.columnCount = boardSize
@@ -70,9 +72,9 @@ class KnightTourActivity : AppCompatActivity() {
                 columnSpec = GridLayout.spec(i % boardSize, 1f)
                 width = 0
                 height = 0
-                setMargins(4, 4, 4, 4)
+                setMargins(4, 4, 4, 4) // Increased margins
             }
-            button.setPadding(8, 8, 8, 8)
+            button.setPadding(8, 8, 8, 8) // Added padding
             button.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))
             button.setTextColor(selectedFontColor)
             button.textSize = selectedFontSize
@@ -104,6 +106,9 @@ class KnightTourActivity : AppCompatActivity() {
             toggleHintsButton.text = if (isHintsEnabled) getString(R.string.disable_hints) else getString(R.string.enable_hints)
             updateHints()
         }
+        helpButton.setOnClickListener {
+            showHelpDialog()
+        }
     }
 
     private fun startNewGame() {
@@ -123,7 +128,15 @@ class KnightTourActivity : AppCompatActivity() {
         moveNumberTextView.text = getString(R.string.move_number, 0)
 
     }
-
+    private fun showHelpDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.help_title))
+            .setMessage(getString(R.string.help_message))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
     private fun onCellClicked(cellIndex: Int) {
         if (moveNumber == 0) {
             moveNumber = 1
@@ -177,6 +190,24 @@ class KnightTourActivity : AppCompatActivity() {
         moveNumberTextView.text = getString(R.string.move_number, moveNumber)
     }
 
+    private fun isPossibleMove(prevRow: Int, prevCol: Int, row: Int, col: Int): Boolean {
+        for (i in 0 until 8) {
+            if (prevRow + possibleMovesY[i] == row && prevCol + possibleMovesX[i] == col) {
+                return true
+            }
+        }
+        return false
+    }
+    private fun hasValidMoves(row: Int, col: Int): Boolean {
+        for (i in 0 until 8) {
+            val nextRow = row + possibleMovesY[i]
+            val nextCol = col + possibleMovesX[i]
+            if (nextRow in 0 until boardSize && nextCol in 0 until boardSize && cells[nextRow * boardSize + nextCol] == "") {
+                return true
+            }
+        }
+        return false
+    }
     private fun showGameOverDialog() {
         AlertDialog.Builder(this)
             .setTitle("Game Over")
@@ -199,27 +230,6 @@ class KnightTourActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
-    private fun isPossibleMove(prevRow: Int, prevCol: Int, row: Int, col: Int): Boolean {
-        for (i in 0 until 8) {
-            if (prevRow + possibleMovesY[i] == row && prevCol + possibleMovesX[i] == col) {
-                return true
-            }
-        }
-        return false
-    }
-
-    private fun hasValidMoves(row: Int, col: Int): Boolean {
-        for (i in 0 until 8) {
-            val nextRow = row + possibleMovesY[i]
-            val nextCol = col + possibleMovesX[i]
-            if (nextRow in 0 until boardSize && nextCol in 0 until boardSize && cells[nextRow * boardSize + nextCol] == "") {
-                return true
-            }
-        }
-        return false
-    }
-
     private fun updateHints() {
         if (!isHintsEnabled || moveNumber == 0) {
             clearHints()

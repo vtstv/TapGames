@@ -14,4 +14,24 @@
     <string name="font_size">Font Size:</string>
     <string name="font_color">Font Color:</string>
     <string name="move_number">Move: %1$d</string>
+    <string name="help">Help</string>
+    <string name="help_title">Knight\'s Tour Help</string>
+    <string name="help_message">
+        \t\tGame Description:\n
+        The Knight\'s Tour is a mathematical problem where you must move a knight on a chessboard to visit every square exactly once.\n\n
+        \t\tGoal:\n
+        The goal is to find a sequence of moves for the knight that covers all squares without revisiting any square.\n\n
+        \t\tHow to Play:\n
+        - Tap on a square to start the tour.\n
+        - The knight can only move in an L-shape: two squares in a horizontal or vertical direction, then one square perpendicular to that.\n
+        - Keep moving the knight until you have visited every square or there are no more valid moves.\n\n
+        \t\tHints:\n
+        - The hint symbols indicate the number of possible next moves from a given square.\n
+        - \'+\': Recommended move according to Warnsdorff\'s rule.\n
+        - \'++\': Mandatory move with only one possible next move.\n
+        - \'-\': Possible but not recommended move.\n
+        - \'--\': A dead-end move (no further moves possible).\n\n
+        Have fun playing the Knight\'s Tour!
+    </string>
 </resources>
+
