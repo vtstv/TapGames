@@ -311,12 +311,14 @@ class KnightTourActivity : AppCompatActivity() {
 
         fontSizeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                (view as? TextView)?.setTextColor(resources.getColor(R.color.white, theme))
                 selectedFontSize = fontSizeAdapter.getItem(position)!!.toFloat()
                 updateButtonFont()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
+
 
         val fontColorAdapter = ArrayAdapter(
             this,
@@ -328,6 +330,7 @@ class KnightTourActivity : AppCompatActivity() {
 
         fontColorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                (view as? TextView)?.setTextColor(resources.getColor(R.color.white, theme))
                 val colorName = fontColorAdapter.getItem(position)!!
                 selectedFontColor = when (colorName) {
                     "Red" -> Color.RED

@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/main_menu_background">
 
     <TextView
         android:id="@+id/moveNumber"
@@ -12,6 +13,8 @@
         android:layout_marginTop="16dp"
         android:text="Move: 0"
         android:textSize="18sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/font_size" />
+            android:text="@string/font_size"
+            android:textColor="@color/white" />
 
         <Spinner
             android:id="@+id/fontSizeSpinner"
@@ -54,7 +58,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/font_color" />
+            android:text="@string/font_color"
+            android:textColor="@color/white" />
 
         <Spinner
             android:id="@+id/fontColorSpinner"

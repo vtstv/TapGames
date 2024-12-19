@@ -6,8 +6,8 @@
     <string name="start_new_game_confirmation">Вы уверены, что хотите начать новую игру?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
-    <string name="enable_hints">Включить Подсказки</string>
-    <string name="disable_hints">Отключить Подсказки</string>
+    <string name="enable_hints">Подсказки</string>
+    <string name="disable_hints">Отключить</string>
     <string name="congratulations">Поздравляем!</string>
     <string name="board_completed">Вы обошли всю доску!</string>
     <string name="ok">OK</string>
