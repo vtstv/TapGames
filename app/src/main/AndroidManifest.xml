@@ -24,7 +24,7 @@
         <activity android:name=".AchievementsActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".HighScoresActivity" />
-        <activity android:name=".levels.KnightTourActivity" />
+        <activity android:name="com.murr.tapgame.KnightTourActivity" />
 
         <receiver android:name=".LanguageChangedReceiver"
             android:exported="false">

@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import com.murr.tapgame.KnightTourActivity
 import com.murr.taptheumber.AchievementsActivity
 import com.murr.taptheumber.databinding.ActivityLevelSelectBinding
 import com.murr.taptheumber.AboutActivity
-import com.murr.taptheumber.HighScoresActivity
 import com.murr.taptheumber.R
 import com.murr.taptheumber.BaseActivity
 
