@@ -8,7 +8,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.murr.taptheumber"
+        applicationId = "com.murr.tapgames"
         minSdk = 26
         // Android 7.0
         targetSdk = 33

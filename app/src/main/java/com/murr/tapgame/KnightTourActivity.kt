@@ -48,8 +48,10 @@ class KnightTourActivity : BaseActivity() {
     private var currentCell = -1
     private var selectedFontSize = 20f
     private var selectedFontColor = Color.BLUE
-    private var previousCell = -1
+    private var previousCells = mutableListOf<Int>()
     private var canUndo = false
+    private val maxUndoMoves = 3
+
 
     private lateinit var sharedPreferences: SharedPreferences
     private val PREFS_NAME = "knight_tour_prefs"
@@ -58,7 +60,6 @@ class KnightTourActivity : BaseActivity() {
     // Added keys for font size and color in shared prefs
     private val KEY_FONT_SIZE = "font_size"
     private val KEY_FONT_COLOR = "font_color"
-
 
     data class GameState(
         var totalKnightMoves: Int = 0,
@@ -69,7 +70,7 @@ class KnightTourActivity : BaseActivity() {
         var currentCell: Int = -1,
         var selectedFontSize: Float = 20f,
         var selectedFontColor: Int = Color.BLUE,
-        var previousCell: Int = -1,
+        var previousCells: MutableList<Int> = mutableListOf(),
         var canUndo: Boolean = false
     )
 
@@ -179,7 +180,7 @@ class KnightTourActivity : BaseActivity() {
         moveNumber = 0
         totalMoves = 0
         currentCell = -1
-        previousCell = -1
+        previousCells.clear()
         canUndo = false
         for (i in 0 until boardSize * boardSize) {
             cells[i] = ""
@@ -274,16 +275,19 @@ class KnightTourActivity : BaseActivity() {
             val prevCol = currentCell % boardSize
 
             if (isPossibleMove(prevRow, prevCol, row, col) && cells[cellIndex] == "") {
-                previousCell = currentCell
+                if(previousCells.size == maxUndoMoves){
+                    previousCells.removeAt(0)
+                }
+                previousCells.add(currentCell)
                 moveNumber++
                 totalMoves++
                 currentCell = cellIndex
                 totalKnightMoves++
-                val prevFrameLayout = gridLayout.getChildAt(previousCell) as FrameLayout
+                val prevFrameLayout = gridLayout.getChildAt(previousCells.last()) as FrameLayout
                 val prevButton = prevFrameLayout.getChildAt(0) as Button
                 val prevImageView = prevFrameLayout.findViewWithTag<ImageView>("knight_icon")
-                prevButton.text = cells[previousCell]
-                if ((previousCell / boardSize + previousCell % boardSize) % 2 == 0) {
+                prevButton.text = cells[previousCells.last()]
+                if ((previousCells.last() / boardSize + previousCells.last() % boardSize) % 2 == 0) {
                     prevButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
                 } else {
                     prevButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))
@@ -324,18 +328,20 @@ class KnightTourActivity : BaseActivity() {
         if (isFinishing || isDestroyed) {
             return
         }
-        if (canUndo && moveNumber > 1) {
-            val prevCellIndex = previousCell
+        if (canUndo && moveNumber > 1 && previousCells.isNotEmpty()) {
+            val prevCellIndex = previousCells.last()
             if (prevCellIndex != -1) {
                 val currentFrameLayout = gridLayout.getChildAt(currentCell) as FrameLayout
                 val currentButton = currentFrameLayout.getChildAt(0) as Button
                 val currentImageView = currentFrameLayout.findViewWithTag<ImageView>("knight_icon")
+
                 currentButton.text = moveNumber.toString()
                 if ((currentCell / boardSize + currentCell % boardSize) % 2 == 0) {
                     currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
                 } else {
                     currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))
                 }
+
                 currentImageView.setImageDrawable(null)
 
                 val prevFrameLayout = gridLayout.getChildAt(prevCellIndex) as FrameLayout
@@ -347,15 +353,16 @@ class KnightTourActivity : BaseActivity() {
                 prevImageView.setImageDrawable(knightIcon)
 
                 cells[currentCell] = ""
+
                 moveNumber--
                 currentCell = prevCellIndex
-                previousCell = -1
                 totalMoves--
                 totalKnightMoves--
-                canUndo = false
-                moveNumberTextView.text = getString(R.string.move_number, moveNumber)
-                updateHints()
+                previousCells.removeLast()
             }
+            canUndo = previousCells.isNotEmpty()
+            moveNumberTextView.text = getString(R.string.move_number, moveNumber)
+            updateHints()
         }
         saveGameState()
     }
@@ -576,7 +583,6 @@ class KnightTourActivity : BaseActivity() {
             fontSizeSpinner.setSelection(6)
         }
 
-
         val initialFontColorPosition = when(selectedFontColor){
             Color.RED -> 1
             Color.GREEN -> 2
@@ -626,7 +632,7 @@ class KnightTourActivity : BaseActivity() {
             currentCell = currentCell,
             selectedFontSize = selectedFontSize,
             selectedFontColor = selectedFontColor,
-            previousCell = previousCell,
+            previousCells = previousCells,
             canUndo = canUndo
         )
 
@@ -670,7 +676,7 @@ class KnightTourActivity : BaseActivity() {
         currentCell = gameState.currentCell
         selectedFontSize = gameState.selectedFontSize
         selectedFontColor = gameState.selectedFontColor
-        previousCell = gameState.previousCell
+        previousCells = gameState.previousCells
         canUndo = gameState.canUndo
 
         moveNumberTextView.text = getString(R.string.move_number, moveNumber)

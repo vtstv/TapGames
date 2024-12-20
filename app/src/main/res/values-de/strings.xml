@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Tap Games</string>
+    <string name="about_text">Dies ist ein einfaches Tap Games set.</string>
+    <string name="knight_tour_info">DAS ZIEL DES SPIELS (PUZZLE): Du musst das Spielfeld gemäß der Regel des Springers im Schach durchqueren, wobei jedes Feld genau einmal betreten wird. Du kannst von jedem Feld aus starten. Eine Rückkehr zum Anfang, also eine Tour auf einer geschlossenen Route, ist nicht erforderlich.</string>
+    <string name="new_game">Neues Spiel</string>
+    <string name="start_new_game_confirmation">Möchtest du wirklich ein neues Spiel starten?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="enable_hints">Hinweise</string>
+    <string name="disable_hints">Deaktivieren</string>
+    <string name="congratulations">Herzlichen Glückwunsch!</string>
+    <string name="board_completed">Du hast das Spielfeld abgeschlossen!</string>
+    <string name="ok">OK</string>
+    <string name="font_size">Größe:</string>
+    <string name="font_color">Farbe:</string>
+    <string name="help">\?</string>
+    <string name="help_title">Springerzug-Hilfe</string>
+    <string name="help_message">
+        \t\tSpielbeschreibung:\n
+        Der Springerzug ist ein mathematisches Problem, bei dem du einen Springer auf einem Schachbrett bewegen musst, um jedes Feld genau einmal zu besuchen.\n\n
+        \t\tZiel:\n
+        Das Ziel ist es, eine Sequenz von Zügen für den Springer zu finden, die alle Felder abdeckt, ohne ein Feld erneut zu betreten.\n\n
+        \t\tSpielanleitung:\n
+        - Tippe auf ein Feld, um die Tour zu starten.\n
+        - Der Springer kann sich nur in einer L-Form bewegen: zwei Felder in horizontaler oder vertikaler Richtung, dann ein Feld senkrecht dazu.\n
+        - Bewege den Springer weiter, bis du alle Felder besucht hast oder keine gültigen Züge mehr möglich sind.\n\n
+        \t\tHinweise:\n
+        - Die Hinweissymbole zeigen die Anzahl der möglichen nächsten Züge von einem bestimmten Feld an.\n
+        - \'+\': Empfohlener Zug gemäß der Regel von Warnsdorff.\n
+        - \'++\': Zwingender Zug mit nur einer möglichen nächsten Bewegung.\n
+        - \'-\': Möglicher, aber nicht empfohlener Zug.\n
+        - \'--\': Sackgassenzug (keine weiteren Züge möglich).\n\n
+        Viel Spaß beim Spielen des Springerzugs!
+    </string>
+    <string name="move_number">Zug: %1$d</string>
+    <string name="choose_language">Sprache</string>
+    <string name="easy_level">Einfach</string>
+    <string name="medium_level">Mittel</string>
+    <string name="hard_level">Schwierig</string>
+    <string name="knight_tour">Springerzug</string>
+    <string name="achievements">Erfolge</string>
+    <string name="high_scores">Bestenlisten</string>
+    <string name="about">Über</string>
+    <string name="select_game">Spiel auswählen</string>
+    <string name="choose_difficulty">Schwierigkeitsgrad wählen</string>
+    <string name="tap_the_number">Tippe die Zahl</string>
+    <string name="achievement_knight_tour_10">Springerreise: 10 Züge</string>
+    <string name="achievement_knight_tour_50">Springerexpedition: 50 Züge</string>
+    <string name="achievement_knight_tour_100">Springerodyssee: 100 Züge</string>
+    <string name="undo">Rückgängig</string>
+    <string name="close">Schließen</string>
+</resources>

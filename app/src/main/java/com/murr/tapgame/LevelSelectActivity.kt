@@ -42,15 +42,16 @@ class LevelSelectActivity : BaseActivity() {
     }
 
     private fun showLanguageSelectionDialog() {
-        // List of available languages (you can add more)
-        val languages = arrayOf("English", "Русский")
+        // List of available languages
+        val languages = arrayOf("English", "Deutsch", "Русский")
 
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.choose_language))
         builder.setSingleChoiceItems(languages, -1) { dialog, which ->
             when (which) {
                 0 -> applyLocale("en") // English
-                1 -> applyLocale("ru") // Russian
+                1 -> applyLocale("de") // Deutsch
+                2 -> applyLocale("ru") // Russian
             }
             dialog.dismiss()
         }
