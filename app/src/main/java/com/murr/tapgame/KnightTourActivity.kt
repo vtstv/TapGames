@@ -4,11 +4,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.widget.Button
 import android.widget.FrameLayout
@@ -31,6 +27,8 @@ class KnightTourActivity : BaseActivity() {
     private lateinit var fontSizeSpinner: android.widget.Spinner
     private lateinit var fontColorSpinner: android.widget.Spinner
     private lateinit var helpButton: Button
+    private lateinit var undoButton: ImageView  // Added undo button
+    private lateinit var closeButton: ImageView // Added close button
 
     private var totalKnightMoves = 0
     private val boardSize = 10
@@ -43,6 +41,9 @@ class KnightTourActivity : BaseActivity() {
     private var currentCell = -1
     private var selectedFontSize = 20f
     private var selectedFontColor = Color.BLUE
+    private var previousCell = -1 // Added previous cell for undo
+    private var canUndo = false // Flag to check if undo is possible
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,12 +56,19 @@ class KnightTourActivity : BaseActivity() {
         fontSizeSpinner = binding.fontSizeSpinner
         fontColorSpinner = binding.fontColorSpinner
         helpButton = binding.helpButton
+        undoButton = binding.undoButton // Initialize undo button
+        closeButton = binding.closeButton // Initialize close button
         gridLayout.rowCount = boardSize
         gridLayout.columnCount = boardSize
         setupSpinners()
         initializeBoard()
         setupButtons()
         Achievements.initializeKnightTourAchievements(this)
+        // Set onClickListener for undo button
+        undoButton.setOnClickListener { undoLastMove() }
+        closeButton.setOnClickListener {
+            returnToMainMenu()
+        }
     }
 
     private fun initializeBoard() {
@@ -152,7 +160,9 @@ class KnightTourActivity : BaseActivity() {
         moveNumber = 0
         totalMoves = 0
         currentCell = -1
+        previousCell = -1
         totalKnightMoves = 0
+        canUndo = false
         moveNumberTextView.text = getString(R.string.move_number, 0)
         for (i in 0 until boardSize * boardSize) {
             cells[i] = ""
@@ -185,9 +195,9 @@ class KnightTourActivity : BaseActivity() {
             .show()
     }
 
+
     private fun onCellClicked(cellIndex: Int) {
         if (moveNumber == 0) {
-
             moveNumber = 1
             totalMoves = 1
             cells[cellIndex] = moveNumber.toString()
@@ -199,7 +209,7 @@ class KnightTourActivity : BaseActivity() {
             val knightIcon = ContextCompat.getDrawable(this, R.drawable.knight_icon)
             imageView.setImageDrawable(knightIcon)
             currentCell = cellIndex
-
+            canUndo = false // Disable undo since it's the first move
             if (!hasValidMoves(currentCell / boardSize, currentCell % boardSize)) {
                 showGameOverDialog()
             } else {
@@ -213,6 +223,7 @@ class KnightTourActivity : BaseActivity() {
 
             if (isPossibleMove(prevRow, prevCol, row, col) && cells[cellIndex] == "") {
                 // Valid move
+                previousCell = currentCell
                 moveNumber++
                 totalMoves++
                 totalKnightMoves++
@@ -230,6 +241,7 @@ class KnightTourActivity : BaseActivity() {
                 prevImageView.setImageDrawable(null)
 
 
+
                 cells[cellIndex] = moveNumber.toString()
                 val frameLayout = gridLayout.getChildAt(cellIndex) as FrameLayout
                 val button = frameLayout.getChildAt(0) as Button
@@ -239,7 +251,7 @@ class KnightTourActivity : BaseActivity() {
                 val knightIcon = ContextCompat.getDrawable(this, R.drawable.knight_icon)
                 imageView.setImageDrawable(knightIcon)
                 currentCell = cellIndex
-
+                canUndo = true // Enable undo after valid move
                 if (moveNumber == boardSize * boardSize) {
                     AlertDialog.Builder(this)
                         .setMessage(getString(R.string.board_completed))
@@ -263,15 +275,46 @@ class KnightTourActivity : BaseActivity() {
         }
     }
 
-    // Helper function to get the previous cell index based on moveNumber
-    private fun getPreviousCell(currentCellIndex: Int): Int {
-        for (i in 0 until boardSize * boardSize) {
-            if (cells[i] == moveNumber.toString()) {
-                return i
+    private fun undoLastMove() {
+        if (canUndo && moveNumber > 1) {
+            // Get the previous cell index from the cells array
+            val prevCellIndex = previousCell;
+            if(prevCellIndex != -1) {
+                val currentFrameLayout = gridLayout.getChildAt(currentCell) as FrameLayout
+                val currentButton = currentFrameLayout.getChildAt(0) as Button
+                val currentImageView = currentFrameLayout.findViewWithTag<ImageView>("knight_icon")
+                currentButton.text = moveNumber.toString()
+                if ((currentCell / boardSize + currentCell % boardSize) % 2 == 0) {
+                    currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+                } else {
+                    currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_gray))
+                }
+                currentImageView.setImageDrawable(null)
+
+
+                val prevFrameLayout = gridLayout.getChildAt(prevCellIndex) as FrameLayout
+                val prevButton = prevFrameLayout.getChildAt(0) as Button
+                val prevImageView = prevFrameLayout.findViewWithTag<ImageView>("knight_icon")
+                prevButton.text = ""
+                prevButton.setBackgroundColor(Color.TRANSPARENT)
+                val knightIcon = ContextCompat.getDrawable(this, R.drawable.knight_icon)
+                prevImageView.setImageDrawable(knightIcon)
+
+                cells[currentCell] = ""
+                moveNumber--
+                currentCell = prevCellIndex
+                previousCell = -1
+                totalMoves--
+                totalKnightMoves--
+
+                canUndo = false
+                moveNumberTextView.text = getString(R.string.move_number, moveNumber)
+                updateHints()
             }
         }
-        return -1
     }
+
+
 
     private fun isPossibleMove(prevRow: Int, prevCol: Int, row: Int, col: Int): Boolean {
         for (i in 0 until 8) {
@@ -297,7 +340,6 @@ class KnightTourActivity : BaseActivity() {
         AlertDialog.Builder(this)
             .setTitle("Game Over")
             .setMessage("No more moves available!\nTotal moves: $totalKnightMoves")
-            .setMessage("No more moves available!")
             .setPositiveButton("New Game") { dialog, _ ->
                 dialog.dismiss()
                 startNewGame()
