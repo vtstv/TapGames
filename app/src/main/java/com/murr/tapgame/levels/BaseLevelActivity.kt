@@ -337,7 +337,7 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // ADDED: Create Confetti
+
     fun getConfetti(): Party {
         val confettiColors = intArrayOf(
             ContextCompat.getColor(this, R.color.yellow),
@@ -357,7 +357,7 @@ abstract class BaseLevelActivity : AppCompatActivity() {
             .build()
     }
 
-    // ADDED: Restart game
+
     private fun restartGame() {
         currentNumber = 1
         score = 0

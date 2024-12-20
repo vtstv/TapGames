@@ -1,4 +1,5 @@
 package com.murr.tapgame
+
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -18,6 +19,8 @@ import com.murr.taptheumber.R
 import com.murr.taptheumber.databinding.ActivityKnightTourBinding
 import com.murr.taptheumber.BaseActivity
 import android.content.SharedPreferences
+import android.view.View
+import android.widget.AdapterView
 import androidx.lifecycle.lifecycleScope
 import com.murr.taptheumber.levels.LevelSelectActivity
 import kotlinx.coroutines.launch
@@ -52,6 +55,10 @@ class KnightTourActivity : BaseActivity() {
     private val PREFS_NAME = "knight_tour_prefs"
     private val KEY_GAME_STATE = "game_state"
 
+    // Added keys for font size and color in shared prefs
+    private val KEY_FONT_SIZE = "font_size"
+    private val KEY_FONT_COLOR = "font_color"
+
 
     data class GameState(
         var totalKnightMoves: Int = 0,
@@ -65,7 +72,6 @@ class KnightTourActivity : BaseActivity() {
         var previousCell: Int = -1,
         var canUndo: Boolean = false
     )
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,11 +98,17 @@ class KnightTourActivity : BaseActivity() {
                 val gameState = loadGameState()
                 if (gameState != null) {
                     updateFromGameState(gameState)
+                    // Restore font size and color from shared preferences
+                    selectedFontSize = sharedPreferences.getFloat(KEY_FONT_SIZE, 20f)
+                    selectedFontColor = sharedPreferences.getInt(KEY_FONT_COLOR, Color.BLUE)
                     runOnUiThread{
                         setupSpinners()
                         recreateBoardUI()
                     }
                 } else {
+                    // Load font settings from SharedPreferences on first load
+                    selectedFontSize = sharedPreferences.getFloat(KEY_FONT_SIZE, 20f)
+                    selectedFontColor = sharedPreferences.getInt(KEY_FONT_COLOR, Color.BLUE)
                     runOnUiThread{
                         initializeBoard()
                         setupSpinners()
@@ -505,14 +517,14 @@ class KnightTourActivity : BaseActivity() {
         val fontSizeAdapter = android.widget.ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
-            (18..28 step 2).map { "$it" }
+            (10..24 step 2).map { "$it" }
         )
         fontSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         fontSizeSpinner.adapter = fontSizeAdapter
-        fontSizeSpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+        fontSizeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
-                parent: android.widget.AdapterView<*>,
-                view: android.view.View?,
+                parent: AdapterView<*>,
+                view: View?,
                 position: Int,
                 id: Long
             ) {
@@ -520,22 +532,23 @@ class KnightTourActivity : BaseActivity() {
                 (view as? TextView)?.setTextColor(resources.getColor(R.color.white, theme))
                 selectedFontSize = fontSizeAdapter.getItem(position)!!.toFloat()
                 updateButtonFont()
+                saveFontSettings() // Save to Shared Preferences
             }
 
-            override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
         val fontColorAdapter = android.widget.ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
-            listOf("Blue", "Red", "Green", "Black", "Yellow")
+            listOf("Blue", "Red", "Green", "Black", "Yellow", "Pink")
         )
         fontColorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         fontColorSpinner.adapter = fontColorAdapter
         fontColorSpinner.onItemSelectedListener =
-            object : android.widget.AdapterView.OnItemSelectedListener {
+            object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
-                    parent: android.widget.AdapterView<*>,
-                    view: android.view.View?,
+                    parent: AdapterView<*>,
+                    view: View?,
                     position: Int,
                     id: Long
                 ) {
@@ -547,14 +560,33 @@ class KnightTourActivity : BaseActivity() {
                         "Green" -> Color.GREEN
                         "Black" -> Color.BLACK
                         "Yellow" -> Color.YELLOW
+                        "Pink" -> Color.MAGENTA
                         else -> Color.BLUE
                     }
                     updateButtonFont()
+                    saveFontSettings() // Save to Shared Preferences
                 }
-                override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+                override fun onNothingSelected(parent: AdapterView<*>) {}
             }
-        fontSizeSpinner.setSelection(2)
-        fontColorSpinner.setSelection(0)
+        // Set initial spinner selections based on saved values
+        val initialFontSizePosition = (10..24 step 2).map { it.toString() }.indexOf(selectedFontSize.toInt().toString())
+        if (initialFontSizePosition != -1) {
+            fontSizeSpinner.setSelection(initialFontSizePosition)
+        }else {
+            fontSizeSpinner.setSelection(6)
+        }
+
+
+        val initialFontColorPosition = when(selectedFontColor){
+            Color.RED -> 1
+            Color.GREEN -> 2
+            Color.BLACK -> 3
+            Color.YELLOW -> 4
+            Color.MAGENTA -> 5
+            else -> 0
+        }
+        fontColorSpinner.setSelection(initialFontColorPosition)
+
     }
 
     private fun updateButtonFont() {
@@ -568,6 +600,19 @@ class KnightTourActivity : BaseActivity() {
             button?.setTextColor(selectedFontColor)
         }
     }
+
+    private fun saveFontSettings() {
+        if (isFinishing || isDestroyed) {
+            return
+        }
+        // Save font size and color to Shared Preferences
+        sharedPreferences.edit()
+            .putFloat(KEY_FONT_SIZE, selectedFontSize)
+            .putInt(KEY_FONT_COLOR, selectedFontColor)
+            .apply()
+
+    }
+
     private fun saveGameState() {
         if (isFinishing || isDestroyed) {
             return
@@ -599,15 +644,14 @@ class KnightTourActivity : BaseActivity() {
             return null
         }
         val gameStateJson = sharedPreferences.getString(KEY_GAME_STATE, null)
-        if (gameStateJson == null) {
-            return null
-        }
 
-        return try {
-            val gson = Gson()
-            gson.fromJson(gameStateJson, GameState::class.java)
-        } catch (e: Exception) {
-            null
+        return  gameStateJson?.let {
+            try {
+                val gson = Gson()
+                gson.fromJson(it, GameState::class.java)
+            } catch (e: Exception) {
+                null
+            }
         }
     }
 

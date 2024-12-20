@@ -11,9 +11,9 @@
     <string name="congratulations">Поздравляем!</string>
     <string name="board_completed">Вы обошли всю доску!</string>
     <string name="ok">OK</string>
-    <string name="font_size">Размер Шрифта:</string>
-    <string name="font_color">Цвет Шрифта:</string>
-    <string name="help">Помощь</string>
+    <string name="font_size">Шрифт:</string>
+    <string name="font_color">Цвет:</string>
+    <string name="help">\?</string>
     <string name="help_title">Помощь по игре \"Ход Конём\"</string>
     <string name="help_message">
         \t\tОписание Игры:\n

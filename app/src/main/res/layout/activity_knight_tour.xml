@@ -66,7 +66,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="5dp"
             android:text="@string/font_size"
             android:textColor="@color/white" />
 
@@ -121,6 +121,7 @@
             style="@style/GameMenuButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="50dip"
             android:text="@string/help" />
     </LinearLayout>
 
