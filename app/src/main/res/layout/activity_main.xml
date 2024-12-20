@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Score: 0"
+        android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -25,10 +25,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Time: 60"
+        android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/scoreTextView" />
 
     <GridLayout
@@ -48,14 +48,13 @@
 
     <Button
         android:id="@+id/startButton"
+        style="@style/GameMenuButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
         android:layout_marginBottom="16dp"
+        android:text="Start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        style="@style/GameMenuButtonStyle"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

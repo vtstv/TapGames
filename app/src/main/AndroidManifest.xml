@@ -26,7 +26,8 @@
         <activity android:name=".HighScoresActivity" />
         <activity android:name="com.murr.tapgame.KnightTourActivity" />
 
-        <receiver android:name=".LanguageChangedReceiver"
+        <receiver
+            android:name=".LanguageChangedReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.murr.taptheumber.LANGUAGE_CHANGED" />

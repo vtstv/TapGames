@@ -4,14 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.murr.taptheumber.databinding.ActivityHighScoresBinding
 
-class HighScoresActivity: AppCompatActivity() {
+class HighScoresActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHighScoresBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHighScoresBinding.inflate (layoutInflater)
-        setContentView (binding.root)
-        showHighScores ()
+        binding = ActivityHighScoresBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        showHighScores()
     }
 
     //  showHighScores() in onResume
@@ -21,8 +21,11 @@ class HighScoresActivity: AppCompatActivity() {
     }
 
     private fun showHighScores() {
-        binding.highScoreEasyTextView.text = "High Score (Easy): ${Achievements.getHighScore (this, Achievements.LEVEL_EASY)}"
-        binding.highScoreMediumTextView.text = "High Score (Medium): ${Achievements.getHighScore (this, Achievements.LEVEL_MEDIUM)}"
-        binding.highScoreHardTextView.text = "High Score (Hard): ${Achievements.getHighScore (this, Achievements.LEVEL_HARD)}"
+        binding.highScoreEasyTextView.text =
+            "High Score (Easy): ${Achievements.getHighScore(this, Achievements.LEVEL_EASY)}"
+        binding.highScoreMediumTextView.text =
+            "High Score (Medium): ${Achievements.getHighScore(this, Achievements.LEVEL_MEDIUM)}"
+        binding.highScoreHardTextView.text =
+            "High Score (Hard): ${Achievements.getHighScore(this, Achievements.LEVEL_HARD)}"
     }
 }

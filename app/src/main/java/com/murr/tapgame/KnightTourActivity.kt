@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.widget.Button
 import android.widget.FrameLayout
@@ -53,7 +52,7 @@ class KnightTourActivity : BaseActivity() {
     private val PREFS_NAME = "knight_tour_prefs"
     private val KEY_GAME_STATE = "game_state"
 
-    // Data class to represent the game state
+
     data class GameState(
         var totalKnightMoves: Int = 0,
         var moveNumber: Int = 0,
@@ -67,7 +66,7 @@ class KnightTourActivity : BaseActivity() {
         var canUndo: Boolean = false
     )
 
-    // Called when the activity is first created
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityKnightTourBinding.inflate(layoutInflater)
@@ -87,19 +86,17 @@ class KnightTourActivity : BaseActivity() {
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         Achievements.initializeKnightTourAchievements(this)
 
-        // Load game state from shared preferences or initialize a new game
+
         lifecycleScope.launch {
             if (!isFinishing && !isDestroyed) {
                 val gameState = loadGameState()
                 if (gameState != null) {
-                    Log.d("KnightTourActivity", "Game state loaded successfully. Updating UI on main thread")
                     updateFromGameState(gameState)
                     runOnUiThread{
                         setupSpinners()
                         recreateBoardUI()
                     }
                 } else {
-                    Log.d("KnightTourActivity", "No saved game state found. Initializing new game on main thread.")
                     runOnUiThread{
                         initializeBoard()
                         setupSpinners()
@@ -109,18 +106,15 @@ class KnightTourActivity : BaseActivity() {
             }
         }
 
-        // Set click listeners for undo and close buttons
         undoButton.setOnClickListener { undoLastMove() }
         closeButton.setOnClickListener { returnToMainMenu() }
     }
 
-    // Initializes the game board
+
     private fun initializeBoard() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping initializeBoard().")
             return
         }
-        Log.d("KnightTourActivity", "Initializing new board.")
         gridLayout.removeAllViews()
         for (i in 0 until boardSize * boardSize) {
             val frameLayout = FrameLayout(this)
@@ -181,10 +175,8 @@ class KnightTourActivity : BaseActivity() {
         moveNumberTextView.text = getString(R.string.move_number, 0)
 
     }
-    // Sets up the button click listeners
     private fun setupButtons() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping setupButtons().")
             return
         }
         newGameButton.setOnClickListener {
@@ -216,23 +208,19 @@ class KnightTourActivity : BaseActivity() {
         }
     }
 
-    // Starts a new game
     private fun startNewGame() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping startNewGame().")
             return
         }
-        Log.d("KnightTourActivity", "Starting a new game.")
         runOnUiThread {
             initializeBoard()
         }
         saveGameState()
     }
 
-    // Shows the help dialog
+
     private fun showHelpDialog() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping showHelpDialog().")
             return
         }
         AlertDialog.Builder(this)
@@ -244,10 +232,8 @@ class KnightTourActivity : BaseActivity() {
             .show()
     }
 
-    // Handles cell click events
     private fun onCellClicked(cellIndex: Int) {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping onCellClicked().")
             return
         }
         if (moveNumber == 0) {
@@ -303,12 +289,9 @@ class KnightTourActivity : BaseActivity() {
                 canUndo = true
 
                 if (moveNumber == boardSize * boardSize) {
-                    AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.board_completed))
-                        .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
-                        .show()
+                    showGameCompletedDialog()
                 }
-                if (!hasValidMoves(currentCell / boardSize, currentCell % boardSize)) {
+                else if (!hasValidMoves(currentCell / boardSize, currentCell % boardSize)) {
                     showGameOverDialog()
                 } else {
                     updateHints()
@@ -324,11 +307,9 @@ class KnightTourActivity : BaseActivity() {
         saveGameState()
     }
 
-    // Undoes the last move
     @SuppressLint("SetTextI18n")
     private fun undoLastMove() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping undoLastMove().")
             return
         }
         if (canUndo && moveNumber > 1) {
@@ -366,7 +347,6 @@ class KnightTourActivity : BaseActivity() {
         }
         saveGameState()
     }
-    // Checks if a move is possible
     private fun isPossibleMove(prevRow: Int, prevCol: Int, row: Int, col: Int): Boolean {
         for (i in 0 until 8) {
             if (prevRow + possibleMovesY[i] == row && prevCol + possibleMovesX[i] == col) {
@@ -376,7 +356,6 @@ class KnightTourActivity : BaseActivity() {
         return false
     }
 
-    // Checks if there are any valid moves from the current position
     private fun hasValidMoves(row: Int, col: Int): Boolean {
         for (i in 0 until 8) {
             val nextRow = row + possibleMovesY[i]
@@ -388,10 +367,8 @@ class KnightTourActivity : BaseActivity() {
         return false
     }
 
-    // Shows the game over dialog
     private fun showGameOverDialog() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping showGameOverDialog().")
             return
         }
         AlertDialog.Builder(this)
@@ -408,11 +385,19 @@ class KnightTourActivity : BaseActivity() {
             .setCancelable(false)
             .show()
     }
+    private fun showGameCompletedDialog() {
+        if (isFinishing || isDestroyed) {
+            return
+        }
+        AlertDialog.Builder(this)
+            .setMessage(getString(R.string.board_completed))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
 
-    // Returns to the main menu
+
     private fun returnToMainMenu() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping returnToMainMenu().")
             return
         }
         val intent = Intent(this, LevelSelectActivity::class.java)
@@ -420,10 +405,8 @@ class KnightTourActivity : BaseActivity() {
         startActivity(intent)
         finish()
     }
-    // Updates the hints on the board
     private fun updateHints() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping updateHints().")
             return
         }
         if (!isHintsEnabled || moveNumber == 0) {
@@ -495,10 +478,9 @@ class KnightTourActivity : BaseActivity() {
         }
     }
 
-    // Clears all hints from the board
+
     private fun clearHints() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping clearHints().")
             return
         }
         for (i in 0 until boardSize * boardSize) {
@@ -516,10 +498,8 @@ class KnightTourActivity : BaseActivity() {
             }
         }
     }
-    // Sets up the font size and color spinners
     private fun setupSpinners() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping setupSpinners().")
             return
         }
         val fontSizeAdapter = android.widget.ArrayAdapter(
@@ -577,10 +557,8 @@ class KnightTourActivity : BaseActivity() {
         fontColorSpinner.setSelection(0)
     }
 
-    // Updates the font of all buttons
     private fun updateButtonFont() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping updateButtonFont().")
             return
         }
         for (i in 0 until gridLayout.childCount) {
@@ -590,13 +568,10 @@ class KnightTourActivity : BaseActivity() {
             button?.setTextColor(selectedFontColor)
         }
     }
-    // Saves the current game state to shared preferences
     private fun saveGameState() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping saveGameState().")
             return
         }
-        Log.d("KnightTourActivity", "Saving game state.")
         val gameState = GameState(
             totalKnightMoves = totalKnightMoves,
             moveNumber = moveNumber,
@@ -617,39 +592,30 @@ class KnightTourActivity : BaseActivity() {
         sharedPreferences.edit()
             .putString(KEY_GAME_STATE, gameStateJson)
             .apply()
-        Log.d("KnightTourActivity", "Game state saved: $gameStateJson")
     }
 
-    // Loads the game state from shared preferences
     private fun loadGameState(): GameState? {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping loadGameState().")
             return null
         }
         val gameStateJson = sharedPreferences.getString(KEY_GAME_STATE, null)
         if (gameStateJson == null) {
-            Log.d("KnightTourActivity", "No saved game state found.")
             return null
         }
 
         return try {
             val gson = Gson()
-            val gameState = gson.fromJson(gameStateJson, GameState::class.java)
-            Log.d("KnightTourActivity", "Game state loaded successfully: $gameState")
-            gameState
+            gson.fromJson(gameStateJson, GameState::class.java)
         } catch (e: Exception) {
-            Log.e("KnightTourActivity", "Error loading game state: ${e.message}")
             null
         }
     }
 
-    // Updates the UI from a loaded game state
+
     private fun updateFromGameState(gameState: GameState) {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping updateFromGameState().")
             return
         }
-        Log.d("KnightTourActivity", "Updating from game state.")
         totalKnightMoves = gameState.totalKnightMoves
         moveNumber = gameState.moveNumber
         totalMoves = gameState.totalMoves
@@ -668,13 +634,12 @@ class KnightTourActivity : BaseActivity() {
         updateHints()
     }
 
-    // Recreates the board UI with the loaded game state
+
+
     private fun recreateBoardUI() {
         if (isFinishing || isDestroyed) {
-            Log.d("KnightTourActivity", "Activity is finishing or destroyed. Skipping recreateBoardUI().")
             return
         }
-        Log.d("KnightTourActivity", "Recreating Board UI.")
         gridLayout.removeAllViews()
         for (i in 0 until boardSize * boardSize) {
             val frameLayout = FrameLayout(this)
@@ -740,7 +705,6 @@ class KnightTourActivity : BaseActivity() {
         }
     }
 
-    // Saves game state when the activity is being destroyed
     override fun onDestroy() {
         if(!isFinishing && !isDestroyed){
             saveGameState()

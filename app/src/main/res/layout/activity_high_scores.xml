@@ -2,35 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/main_menu_background"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="High Scores"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/highScoreEasyTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Easy: 0"/>
+        android:text="Easy: 0" />
 
     <TextView
         android:id="@+id/highScoreMediumTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Medium: 0"/>
+        android:text="Medium: 0" />
 
     <TextView
         android:id="@+id/highScoreHardTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hard: 0"/>
+        android:text="Hard: 0" />
 
 </LinearLayout>

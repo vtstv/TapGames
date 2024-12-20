@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp"
     android:background="@color/light_gray"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/congratsTextView"
@@ -34,16 +34,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/returnButton"
             style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Return to Main Menu"
-            android:background="@drawable/button_selector"/>
+            android:background="@drawable/button_selector"
+            android:text="Return to Main Menu" />
 
         <Button
             android:id="@+id/nextLevelButton"
@@ -51,8 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:background="@drawable/button_selector"
             android:text="Next Level"
-            android:visibility="gone"
-            android:background="@drawable/button_selector"/>
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

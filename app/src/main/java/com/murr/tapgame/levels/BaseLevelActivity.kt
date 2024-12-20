@@ -1,7 +1,6 @@
 package com.murr.taptheumber.levels
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -22,7 +21,6 @@ import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.PartyFactory
 import nl.dionsegijn.konfetti.core.Position
 import nl.dionsegijn.konfetti.core.emitter.Emitter
-import nl.dionsegijn.konfetti.core.emitter.EmitterConfig
 import nl.dionsegijn.konfetti.core.models.Shape
 import nl.dionsegijn.konfetti.xml.KonfettiView
 import java.util.concurrent.TimeUnit
@@ -240,7 +238,8 @@ abstract class BaseLevelActivity : AppCompatActivity() {
         val congratsTextView = dialogView.findViewById<TextView>(R.id.congratsTextView)
         val scoreTextView = dialogView.findViewById<TextView>(R.id.scoreTextView)
         val returnButton = dialogView.findViewById<Button>(R.id.returnButton)
-        val nextLevelButton = dialogView.findViewById<Button>(R.id.nextLevelButton) // Get the Next Level button
+        val nextLevelButton =
+            dialogView.findViewById<Button>(R.id.nextLevelButton) // Get the Next Level button
         val confettiView = dialogView.findViewById<KonfettiView>(R.id.confettiView)
 
         scoreTextView.text = "Your Score: $score"
@@ -289,18 +288,22 @@ abstract class BaseLevelActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+
             Achievements.LEVEL_MEDIUM -> {
                 val intent = Intent(this, HardLevelActivity::class.java)
                 startActivity(intent)
                 finish()
             }
+
             Achievements.LEVEL_HARD -> {
                 // All levels completed, show a congratulatory message or return to the main menu
                 showCongratulationsDialog()
             }
+
             else -> returnToMainMenu() // If the level is not recognized, return to the main menu
         }
     }
+
     // Show Congratulation Dialog
     private fun showCongratulationsDialog() {
         AlertDialog.Builder(this)

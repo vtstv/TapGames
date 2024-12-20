@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import com.murr.tapgame.KnightTourActivity
-import com.murr.taptheumber.AchievementsActivity
-import com.murr.taptheumber.databinding.ActivityLevelSelectBinding
 import com.murr.taptheumber.AboutActivity
-import com.murr.taptheumber.R
+import com.murr.taptheumber.AchievementsActivity
 import com.murr.taptheumber.BaseActivity
+import com.murr.taptheumber.R
+import com.murr.taptheumber.databinding.ActivityLevelSelectBinding
 
 class LevelSelectActivity : BaseActivity() {
     private lateinit var binding: ActivityLevelSelectBinding
@@ -40,6 +40,7 @@ class LevelSelectActivity : BaseActivity() {
             showLanguageSelectionDialog()
         }
     }
+
     private fun showLanguageSelectionDialog() {
         // List of available languages (you can add more)
         val languages = arrayOf("English", "Русский")
@@ -56,6 +57,7 @@ class LevelSelectActivity : BaseActivity() {
         val dialog = builder.create()
         dialog.show()
     }
+
     private fun showTapTheNumberDifficultySelection() {
         val difficultyLevels = arrayOf(
             getString(R.string.easy_level),

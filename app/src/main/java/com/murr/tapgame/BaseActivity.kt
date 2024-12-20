@@ -6,8 +6,6 @@ import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Locale
-import android.content.SharedPreferences
-import androidx.core.os.ConfigurationCompat
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -57,6 +55,7 @@ open class BaseActivity : AppCompatActivity() {
         val intent = Intent("com.murr.taptheumber.LANGUAGE_CHANGED")
         sendBroadcast(intent)
     }
+
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(receiver)

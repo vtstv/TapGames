@@ -48,6 +48,10 @@ class AchievementsActivity : AppCompatActivity() {
     }
 
     private fun getAchievementStatus(achievementKey: String): String {
-        return if (Achievements.isAchievementUnlocked(this, achievementKey)) "Unlocked" else "Locked"
+        return if (Achievements.isAchievementUnlocked(
+                this,
+                achievementKey
+            )
+        ) "Unlocked" else "Locked"
     }
 }

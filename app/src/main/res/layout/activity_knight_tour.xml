@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@drawable/main_menu_background"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/main_menu_background">
 
     <ImageView
         android:id="@+id/closeButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@drawable/ic_close"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:scaleType="fitCenter"
-        app:tint="@color/white"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:tint="@color/white" />
 
 
     <TextView
@@ -25,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Move: 0"
-        android:textSize="18sp"
         android:textColor="@color/white"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,8 +46,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="2dp"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toTopOf="@id/settingsLayout"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/moveNumber" />
@@ -103,25 +102,25 @@
 
         <Button
             android:id="@+id/newGameButton"
+            style="@style/GameMenuButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            style="@style/GameMenuButtonStyle"
             android:text="@string/new_game" />
 
         <Button
             android:id="@+id/toggleHintsButton"
+            style="@style/GameMenuButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            style="@style/GameMenuButtonStyle"
             android:text="@string/enable_hints" />
 
         <Button
             android:id="@+id/helpButton"
+            style="@style/GameMenuButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/GameMenuButtonStyle"
             android:text="@string/help" />
     </LinearLayout>
 
