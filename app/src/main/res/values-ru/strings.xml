@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Соедини Цифры</string>
+    <string name="app_name">Tap Games</string>
     <string name="about_text">Это простая игра \"Соедини Цифры\".</string>
     <string name="knight_tour_info">ЦЕЛЬ ИГРЫ (ГОЛОВОЛОМКИ): Необходимо обойти доску по правилу перемещения шахматного коня с попаданием в каждое поле по одному разу. Начинать можно с любого поля. Возвращаться в начало, то есть совершать обход по замкнутому маршруту, не обязательно.</string>
     <string name="new_game">Новая Игра</string>
